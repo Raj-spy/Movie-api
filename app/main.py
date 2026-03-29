@@ -23,16 +23,19 @@ redis_client = redis.Redis(
     decode_responses=True
 )
 
+
 app = FastAPI(
     title="Movie Sentiment API",
     description="Movie reviews ka sentiment analyze karo",
     version="1.0.0"
 )
 
+
 # Request model
 class ReviewRequest(BaseModel):
     text: str
     movie_name: str = "Unknown"
+
 
 # Response model
 class ReviewResponse(BaseModel):
@@ -49,6 +52,7 @@ def metrics():
         generate_latest(),
         media_type=CONTENT_TYPE_LATEST
     )
+
 
 @app.get("/")
 def root():
