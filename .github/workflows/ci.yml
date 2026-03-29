@@ -4,6 +4,11 @@ on:
   push:
   pull_request:
 
+  - name: Lint code
+    run: |
+     pip install flake8
+     flake8 .
+
 jobs:
   test:
     runs-on: ubuntu-latest
