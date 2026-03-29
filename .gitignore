@@ -1,0 +1,18 @@
+# enviroment files
+.env
+
+venv/
+.venv/
+
+# python cache files
+__pycache__/
+.pyc
+
+#logs
+.logs/
+
+# system files
+.DS_store
+
+# Docker
+.pid
