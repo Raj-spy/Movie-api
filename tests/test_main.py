@@ -40,6 +40,6 @@ def test_empty_text():
         "movie_name": "Test"
     })
     assert response.status_code == 400
-    
+
 
 
