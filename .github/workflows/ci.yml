@@ -8,6 +8,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+
+    env:
+     REDIS_HOST: localhost
+
     services:
       redis:
         image: redis:7

@@ -17,7 +17,7 @@ ANALYZE_COUNTER = Counter(
 load_dotenv()
 
 redis_client = redis.Redis(
-    host="redis",  # ⚠️ docker-compose service name
+    host=os.getenv("REDIS_HOST", "redis"),  # ⚠️ docker-compose service name
     port=6379,
     decode_responses=True
 )
