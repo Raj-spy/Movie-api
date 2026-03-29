@@ -2,17 +2,9 @@ from textblob import TextBlob
 
 
 def analyze_sentiment(text: str) -> dict:
-    """
-    Text ka sentiment analyze karo
-    Positive / Negative / Neutral return karo
-    """
+
     blob = TextBlob(text)
     score = blob.sentiment.polarity
-
-    # Score -1 to +1 hota hai
-    # -1 = very negative
-    #  0 = neutral
-    # +1 = very positive
 
     if score > 0.1:
         sentiment = "positive"

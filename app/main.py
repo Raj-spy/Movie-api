@@ -1,10 +1,8 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response
 from pydantic import BaseModel
 from app.sentiment import analyze_sentiment
 from dotenv import load_dotenv
-from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
-from fastapi import Response
-from prometheus_client import Counter
+from prometheus_client import generate_latest, CONTENT_TYPE_LATEST, Counter
 import os
 import redis
 import json
@@ -18,11 +16,10 @@ ANALYZE_COUNTER = Counter(
 load_dotenv()
 
 redis_client = redis.Redis(
-    host=os.getenv("REDIS_HOST", "redis"),  # ⚠️ docker-compose service name
+    host=os.getenv("REDIS_HOST", "redis"),
     port=6379,
     decode_responses=True
 )
-
 
 app = FastAPI(
     title="Movie Sentiment API",
@@ -31,13 +28,11 @@ app = FastAPI(
 )
 
 
-# Request model
 class ReviewRequest(BaseModel):
     text: str
     movie_name: str = "Unknown"
 
 
-# Response model
 class ReviewResponse(BaseModel):
     movie_name: str
     text: str
@@ -48,10 +43,7 @@ class ReviewResponse(BaseModel):
 
 @app.get("/metrics")
 def metrics():
-    return Response(
-        generate_latest(),
-        media_type=CONTENT_TYPE_LATEST
-    )
+    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
 
 @app.get("/")
@@ -71,24 +63,20 @@ def health():
 @app.post("/analyze", response_model=ReviewResponse)
 def analyze_review(review: ReviewRequest):
     ANALYZE_COUNTER.inc()
+
     if not review.text.strip():
         raise HTTPException(
             status_code=400,
             detail="Text empty nahi hona chahiye!"
-            
         )
 
     cache_key = f"sentiment:{review.text}"
 
-    # 🔍 Check cache
     cached = redis_client.get(cache_key)
     if cached:
         result = json.loads(cached)
     else:
-        # 🧠 Run model
         result = analyze_sentiment(review.text)
-
-        # 💾 Store in Redis
         redis_client.set(cache_key, json.dumps(result))
 
     return ReviewResponse(
