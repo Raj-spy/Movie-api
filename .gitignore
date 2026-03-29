@@ -1,6 +1,7 @@
 # enviroment files
 .env
 
+# virtual enviroment folders
 venv/
 .venv/
 
