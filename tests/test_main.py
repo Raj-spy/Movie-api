@@ -3,15 +3,18 @@ from app.main import app
 
 client = TestClient(app)
 
+
 def test_root():
     response = client.get("/")
     assert response.status_code == 200
     assert response.json()["version"] == "1.0.0"
 
+
 def test_health():
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json()["status"] == "healthy"
+
 
 def test_analyze_positive():
     response = client.post("/analyze", json={
@@ -21,6 +24,7 @@ def test_analyze_positive():
     assert response.status_code == 200
     assert response.json()["sentiment"] == "positive"
 
+
 def test_analyze_negative():
     response = client.post("/analyze", json={
         "text": "This movie was terrible and boring",
@@ -28,6 +32,7 @@ def test_analyze_negative():
     })
     assert response.status_code == 200
     assert response.json()["sentiment"] == "negative"
+
 
 def test_empty_text():
     response = client.post("/analyze", json={

@@ -9,6 +9,7 @@ import os
 import redis
 import json
 
+
 ANALYZE_COUNTER = Counter(
     "analyze_requests_total",
     "Total analyze API calls"
@@ -57,9 +58,11 @@ def root():
         "docs": "/docs"
     }
 
+
 @app.get("/health")
 def health():
     return {"status": "healthy"}
+
 
 @app.post("/analyze", response_model=ReviewResponse)
 def analyze_review(review: ReviewRequest):

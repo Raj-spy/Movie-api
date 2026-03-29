@@ -1,5 +1,6 @@
 from textblob import TextBlob
 
+
 def analyze_sentiment(text: str) -> dict:
     """
     Text ka sentiment analyze karo
