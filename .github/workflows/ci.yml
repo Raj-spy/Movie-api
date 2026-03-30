@@ -51,6 +51,6 @@ jobs:
         run: |
           pytest -v
 
-       -name: build Docker image
+      - name: build Docker image
         run: |
          docker build -t movie-api .    
