@@ -52,5 +52,5 @@ jobs:
           pytest -v
 
        -name: build Docker image
-        docker run karna h kya phele ? uske baad push karu ? abhi docker band hai run: |
+        run: |
          docker build -t movie-api .    
