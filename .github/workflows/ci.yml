@@ -92,7 +92,7 @@ jobs:
          TEST_SECRET: ${{ secrets.TEST_SECRET }}
 
       - name: upload test Artifacts
-        uses: actions/upload-aritfact@v3
+        uses: actions/upload-artifact@v3
         with:
          name: test-results
          path: .pytest.cache     
