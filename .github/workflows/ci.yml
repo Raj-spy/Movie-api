@@ -81,7 +81,12 @@ jobs:
         run: |
          curl http://localhost:8000/health
 
-      - name: Print secret
-        run: echo $TEST_SECRET
+      - name: Check secret exists
+        run: |
+         if [ -z "$TEST_SECRET" ]; then
+         echo "Secret is EMPTY ❌"
+         else
+         echo "Secret loaded ✅"
+         fi
         env:
-         TEST_SECRET: ${{ secrets.TEST_SECRET }}     
+         TEST_SECRET: ${{ secrets.TEST_SECRET }}  
