@@ -89,4 +89,10 @@ jobs:
          echo "Secret loaded ✅"
          fi
         env:
-         TEST_SECRET: ${{ secrets.TEST_SECRET }}  
+         TEST_SECRET: ${{ secrets.TEST_SECRET }}
+
+      - name: upload test Artifacts
+        uses: actions/upload-aritfact@v3
+        with:
+         name: test-results
+         path: .pytest.cache     
