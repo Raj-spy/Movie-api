@@ -79,4 +79,9 @@ jobs:
 
       - name: Test API
         run: |
-         curl http://localhost:8000/health    
+         curl http://localhost:8000/health
+
+      - name: Print secret
+        run: echo $TEST_SECRET
+        env:
+         TEST_SECRET: ${{ secrets.TEST_SECRET }}     
