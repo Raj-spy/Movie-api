@@ -15,14 +15,24 @@ RUN pytest tests/ -v
 
 # Stage 3 — Runner (Final image)
 FROM python:3.11-slim
-RUN groupadd -r appuser && useradd -r -g appuser appuser
+
+RUN groupadd -r appuser && useradd -m -r -g appuser appuser
+
 WORKDIR /app
+
 COPY --from=builder /usr/local /usr/local
 COPY app/ ./app/
+
+RUN mkdir -p /home/appuser/.local
 RUN chown -R appuser:appuser /app /home/appuser/.local
+
 ENV PATH=/usr/local/bin:$PATH
+
 HEALTHCHECK --interval=10s --timeout=3s --retries=3 \
   CMD python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
+
 USER appuser
+
 EXPOSE 8000
+
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
