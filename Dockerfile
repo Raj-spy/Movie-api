@@ -17,7 +17,7 @@ RUN pytest tests/ -v
 # Stage 3 — Runner (Final image)
 FROM python:3.11-alpine
 
-RUN groupadd -r appuser && useradd -m -r -g appuser appuser
+RUN addgroup -S appuser && adduser -S appuser -G appuser
 
 WORKDIR /app
 
