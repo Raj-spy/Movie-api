@@ -3,7 +3,7 @@ FROM python:3.11-alpine AS builder
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-RUN apt-get update && apt-get upgrade -y && apt-get clean
+RUN apk update && apk upgrade
 
 # Stage 2 — Tester
 FROM python:3.11-alpine AS tester
