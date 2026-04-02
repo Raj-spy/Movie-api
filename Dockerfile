@@ -2,14 +2,14 @@
 FROM python:3.11-slim AS builder
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install --user -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Stage 2 — Tester
 FROM python:3.11-slim AS tester
 WORKDIR /app
-COPY --from=builder /root/.local /root/.local
-COPY . .
-ENV PATH=/root/.local/bin:$PATH
+COPY --from=builder /usr/local /usr/local
+COPY tests/ ./tests/
+ENV PATH=/usr/local/bin:$PATH
 RUN python3 -m textblob.download_corpora
 RUN pytest tests/ -v
 
@@ -17,10 +17,10 @@ RUN pytest tests/ -v
 FROM python:3.11-slim
 RUN groupadd -r appuser && useradd -r -g appuser appuser
 WORKDIR /app
-COPY --from=builder /root/.local /home/appuser/.local
+COPY --from=builder /usr/local /usr/local
 COPY app/ ./app/
 RUN chown -R appuser:appuser /app /home/appuser/.local
-ENV PATH=/home/appuser/.local/bin:$PATH
+ENV PATH=/usr/local/bin:$PATH
 HEALTHCHECK --interval=10s --timeout=3s --retries=3 \
   CMD python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
 USER appuser
