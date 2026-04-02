@@ -6,4 +6,3 @@ pytest==7.4.0
 httpx==0.26.0
 redis
 prometheus-client
-starlette>=0.40.0
