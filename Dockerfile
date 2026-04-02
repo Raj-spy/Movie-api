@@ -3,6 +3,7 @@ FROM python:3.11-alpine AS builder
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip wheel starlette
 RUN apk update && apk upgrade
 
 # Stage 2 — Tester
