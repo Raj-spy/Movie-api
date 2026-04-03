@@ -34,11 +34,11 @@ RUN chown -R appuser:appuser /app
 
 ENV PATH=/usr/local/bin:$PATH
 
-HEALTHCHECK --interval=10s --timeout=3s --retries=3 \
-  CMD wget -qO- http://localhost:8000/health || exit 1
+HEALTHCHECK --interval=15s --timeout=5s --retries=5 \
+CMD curl --fail http://localhost:8000/health || exit 1
 
 USER appuser
 
 EXPOSE 8000
 
-CMD ["gunicorn", "app.main:app", "-k", "uvicorn.workers.UvicornWorker", "-w", "4", "-b", "0.0.0.0:8000"]
+CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "app.main:app", "--bind", "0.0.0.0:8000", "--workers", "2"]
