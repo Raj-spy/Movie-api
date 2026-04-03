@@ -60,6 +60,11 @@ def health():
     return {"status": "healthy"}
 
 
+@app.get("/health")
+def health():
+    return {"status": "healthy v2"}
+
+
 @app.post("/analyze", response_model=ReviewResponse)
 def analyze_review(review: ReviewRequest):
     ANALYZE_COUNTER.inc()
