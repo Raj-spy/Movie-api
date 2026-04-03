@@ -34,7 +34,7 @@ RUN chown -R appuser:appuser /app
 
 ENV PATH=/usr/local/bin:$PATH
 
-HEALTHCHECK --interval=15s --timeout=5s --retries=5 \
+HEALTHCHECK --interval=20s --timeout=10s --start-period=30s --retries=5 \
 CMD curl --fail http://localhost:8000/health || exit 1
 
 USER appuser
