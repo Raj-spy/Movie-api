@@ -48,10 +48,6 @@ jobs:
           pip install flake8
           flake8 .
 
-      - name: Run tests
-        run: |
-          pytest -v
-
       - name: build Docker image
         run: |
          docker build -t movie-api .
@@ -94,9 +90,8 @@ jobs:
       - name: Check files
         run: ls -la  
       
-      - name: Run tests
-        run: |
-         pytest -v > test-report.txt
+      - name: Run tests and save report
+        run:  pytest -v > test-report.txt
 
       - name: upload test Artifacts
         uses: actions/upload-artifact@v4
