@@ -18,7 +18,7 @@ services:
       - prometheus
 
   api:
-    build: .
+    image: rajspy/myapp:latest
     ports:
       - "8000:8000"
     depends_on:
