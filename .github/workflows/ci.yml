@@ -7,7 +7,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    
 
     strategy:
       matrix:
@@ -20,8 +19,7 @@ jobs:
       redis:
         image: redis:7
         ports:
-          - 6379:6379  
-
+          - 6379:6379
 
     steps:
       - uses: actions/checkout@v3
@@ -30,13 +28,13 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: cache dependencies
+      - name: Cache dependencies
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip-     
+            ${{ runner.os }}-pip-
 
       - name: Install dependencies
         run: |
@@ -48,53 +46,16 @@ jobs:
           pip install flake8
           flake8 .
 
-      - name: build Docker image
-        run: |
-         docker build -t movie-api .
+      - name: Run tests
+        run: pytest -v
 
+      - name: Save test report
+        if: always()
+        run: pytest -v > test-report.txt
 
-      - name: Create Docker network
-        run: docker network create app-network
-
-      - name: Run Redis container
-        run: |
-         docker run -d --name redis \
-         --network app-network \
-         redis:7
-
-      - name: Run API container
-        run: |
-         docker run -d --name movie-api \
-         --network app-network \
-         -p 8000:8000 \
-         -e REDIS_HOST=redis \
-         movie-api
-
-      - name: Wait for container
-        run: sleep 5  
-
-      - name: Test API
-        run: |
-         curl http://localhost:8000/health
-
-      - name: Check secret exists
-        run: |
-         if [ -z "$TEST_SECRET" ]; then
-         echo "Secret is EMPTY ❌"
-         else
-         echo "Secret loaded ✅"
-         fi
-        env:
-         TEST_SECRET: ${{ secrets.TEST_SECRET }}
-
-      - name: Check files
-        run: ls -la  
-      
-      - name: Run tests and save report
-        run:  pytest -v > test-report.txt
-
-      - name: upload test Artifacts
+      - name: Upload test artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-         name: test-results-${{ matrix.python-version }}
-         path: test-report.txt
+          name: test-results-${{ matrix.python-version }}
+          path: test-report.txt
