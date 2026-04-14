@@ -1,4 +1,4 @@
-name: CI-CD Pipeline
+name: CD Pipeline
 
 on:
   push:
@@ -11,16 +11,22 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Build image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/myapp:${{ github.sha }} .
-
-      - name: Login DockerHub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-
-      - name: Tag latest
-        run: docker tag ${{ secrets.DOCKER_USERNAME }}/myapp:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/myapp:latest
-
-      - name: Push images
+      # Build Docker Image
+      - name: Build Docker image
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/myapp:${{ github.sha }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/myapp:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/movie-api:${{ github.sha }} .
+
+      # Login to DockerHub
+      - name: Login to DockerHub
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+      # Push Image
+      - name: Push Docker image
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/movie-api:${{ github.sha }}
+
+      # Print Image Tag (IMPORTANT)
+      - name: Show Image Tag
+        run: |
+          echo "NEW IMAGE TAG: ${{ secrets.DOCKER_USERNAME }}/movie-api:${{ github.sha }}"
