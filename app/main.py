@@ -24,7 +24,7 @@ redis_client = redis.Redis(
 app = FastAPI(
     title="Movie Sentiment API",
     description="Movie reviews ka sentiment analyze karo",
-    version="1.0.0"
+    version="1.0.2"
 )
 
 
