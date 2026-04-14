@@ -49,8 +49,8 @@ def metrics():
 @app.get("/")
 def root():
     return {
-        "message": "Movie Sentiment API",
-        "version": "1.0.0",
+        "message": "Movie Sentiment API 🚀 (v3 deployed)",
+        "version": "1.0.2",
         "docs": "/docs"
     }
 
