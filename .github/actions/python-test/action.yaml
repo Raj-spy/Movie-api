@@ -1,0 +1,23 @@
+name: "Run python tests"
+
+description: "Run python tests using pytest"
+
+inputs:
+  python-version:
+    required: true
+
+    runs:
+      using: "python"
+      steps:
+        - name: set up python
+          uses: action/setup-python@v4
+          with:
+            python-version: ${{ inputs.python-version }}
+
+        - name: install dependencies
+          run: pip install -r requirements.txt
+          shell: bash
+
+        - name: run tests
+          run: pytest tests/
+          shell: bash

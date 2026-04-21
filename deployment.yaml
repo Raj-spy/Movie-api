@@ -24,5 +24,7 @@ spec:
           resources:        # ✅ FIXED
             requests:
               cpu: "100m"
+              memory: 126Mi
             limits:         # ✅ lowercase
               cpu: "200m"
+              memory: 256Mi
