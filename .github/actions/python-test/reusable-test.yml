@@ -1,16 +1,15 @@
-name: CI Pipeline
+name: Reusable Test Workflow
 
 on:
-  push:
-  pull_request:
+  workflow_call:
+    inputs:
+      python-version:
+        required: true
+        type: string
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        python-version: [3.9, 3.11]
 
     env:
       REDIS_HOST: localhost
@@ -22,11 +21,11 @@ jobs:
           - 6379:6379
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ inputs.python-version }}
 
       - name: Cache dependencies
         uses: actions/cache@v3
@@ -57,5 +56,5 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results-${{ matrix.python-version }}
+          name: test-results-${{ inputs.python-version }}
           path: test-report.txt

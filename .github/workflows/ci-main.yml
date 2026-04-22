@@ -1,0 +1,15 @@
+name: Main CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.11"]
+
+    uses: ./.github/workflows/reusable-test.yml
+    with:
+      python-version: ${{ matrix.python-version }}
