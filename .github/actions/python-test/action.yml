@@ -7,7 +7,7 @@ inputs:
     required: true
 
     runs:
-      using: "python"
+      using: "composite"
       steps:
         - name: set up python
           uses: action/setup-python@v4
