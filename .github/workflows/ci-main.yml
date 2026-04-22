@@ -10,6 +10,6 @@ jobs:
       matrix:
         python-version: ["3.9", "3.11"]
 
-    uses: ./.github/actions/python-test/reusable-test.yml
+    uses: ./.github/workflows/reusable-test.yml
     with:
       python-version: ${{ matrix.python-version }}
