@@ -1,7 +1,8 @@
 replicaCount: 2
 
+
 image:
-  repository: rajspy/movie-api
+  repository: 257394469486.dkr.ecr.ap-south-1.amazonaws.com/movie-api
   tag: 3d98671a6f4bb4393394a2ed03ce968f124f4f49
   pullPolicy: IfNotPresent
 

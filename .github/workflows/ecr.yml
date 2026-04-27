@@ -27,8 +27,9 @@ jobs:
       - name: Build Docker image
         run: docker build -t movie-api .
 
-      - name: Tag image
-        run: docker tag movie-api:latest 257394469486.dkr.ecr.ap-south-1.amazonaws.com/movie-api:latest
+      -  name: Tag image
+         run: |
+          docker tag movie-api:latest 257394469486.dkr.ecr.ap-south-1.amazonaws.com/movie-api:${{ github.sha }}
 
       - name: Push image
-        run: docker push 257394469486.dkr.ecr.ap-south-1.amazonaws.com/movie-api:latest
+        run: docker push 257394469486.dkr.ecr.ap-south-1.amazonaws.com/movie-api:${{ github.sha }}
