@@ -1,0 +1,25 @@
+replicaCount: 2
+
+image:
+  repository: rajspy/movie-api
+  tag: 3d98671a6f4bb4393394a2ed03ce968f124f4f49
+  pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  port: 8000
+
+ingress:
+  host: movie.local
+
+redis:
+  host: redis
+  port: 6379
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
