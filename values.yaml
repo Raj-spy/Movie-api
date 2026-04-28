@@ -1,10 +1,10 @@
 replicaCount: 2
 
-
 image:
-  repository: 257394469486.dkr.ecr.ap-south-1.amazonaws.com/movie-api
-  tag: 3d98671a6f4bb4393394a2ed03ce96124f4f49
+  repository: rajspy/movie-api
+  tag: 9bfbd78c42092cb425b17359effe83eca5d6b87d
   pullPolicy: IfNotPresent
+
 
 service:
   type: NodePort
