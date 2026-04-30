@@ -50,7 +50,7 @@ def metrics():
 def root():
     return {
         "message": "Movie Sentiment API 🚀 (v3 deployed)",
-        "version": "1.0.2",
+        "version": "canary",
         "docs": "/docs"
     }
 

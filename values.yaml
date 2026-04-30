@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: rajspy/movie-api
-  tag: 9bfbd78c42092cb425b17359effe83eca5d6b87d
+  tag: d5ce29d478f082bed6398e26ebed110e11ab16b9
   pullPolicy: IfNotPresent
 
 

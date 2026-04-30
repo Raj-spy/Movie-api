@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movie-canary
+  namespace: movie
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: movie-api
+      version: canary
+  template:
+    metadata:
+      labels:
+        app: movie-api
+        version: canary
+    spec:
+      containers:
+      - name: movie-api
+        image: rajspy/movie-api:d5ce29d478f082bed6398e26ebed110e11ab16b9
+        ports:
+        - containerPort: 8000

@@ -6,11 +6,11 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-movie-api
+      app: movie-api
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-movie-api
+        app: movie-api
     spec:
       containers:
         - name: movie-api

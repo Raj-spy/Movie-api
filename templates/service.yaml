@@ -5,7 +5,7 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   selector:
-    app: {{ .Release.Name }}-movie-api
+    app: movie-api
   ports:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.port }}
