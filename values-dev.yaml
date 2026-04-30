@@ -11,6 +11,6 @@ resources:
 ingress:
   enabled: false
 
-  env:
-  - name: APP_VERSION
-    value: canary
+  # env:
+  # - name: APP_VERSION
+    # value: canary
