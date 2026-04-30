@@ -46,11 +46,13 @@ def metrics():
     return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
 
+import os
+
 @app.get("/")
 def root():
     return {
-        "message": "Movie Sentiment API 🚀 (v3 deployed)",
-        "version": "canary",
+        "message": "Movie Sentiment API 🚀",
+        "version": os.getenv("APP_VERSION", "1.0.2"),
         "docs": "/docs"
     }
 
