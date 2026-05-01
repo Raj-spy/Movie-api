@@ -67,4 +67,4 @@ jobs:
         with:
           image-ref: user/movie-api:${{ github.sha }}
           exit-code: 1
-          severity: CRITICAL , HIGH
+          severity: CRITICAL,HIGH
