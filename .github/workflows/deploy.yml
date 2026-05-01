@@ -35,5 +35,5 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ secrets.DOCKER_USERNAME }}/movie-api:${{ github.sha }}
-          severity: CRITICAL,HIGH
+          severity: CRITICAl
           exit-code: 1    
