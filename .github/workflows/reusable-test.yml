@@ -65,6 +65,6 @@ jobs:
       - name: Fail on critical vulnerabilities
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: user/movie-api:${{ github.sha }}
+          image-ref: rajspy/movie-api:${{ github.sha }}
           exit-code: 1
           severity: CRITICAL,HIGH
