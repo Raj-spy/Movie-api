@@ -7,3 +7,6 @@ httpx==0.26.0
 redis
 prometheus-client
 gunicorn
+starlette==0.40.0
+wheel==0.46.2
+jaraco.context==6.1.0
