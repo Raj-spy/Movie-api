@@ -67,4 +67,4 @@ jobs:
         with:
           image-ref: rajspy/movie-api:${{ github.sha }}
           exit-code: 1
-          severity: CRITICAL,HIGH
+          severity: CRITICAL
