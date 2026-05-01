@@ -10,6 +10,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     env:
       REDIS_HOST: localhost
@@ -37,20 +38,15 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+         python -m pip install --upgrade pip
+         pip install -r requirements.txt flake8 pytest
 
       - name: Lint code
-        run: |
-          pip install flake8
-          flake8 .
-
-      - name: Run tests
-        run: pytest -v
+        run: flake8 .    
 
       - name: Save test report
         if: always()
-        run: pytest -v > test-report.txt
+        run: pytest -v | tee test-report.txt
 
       - name: Upload test artifacts
         if: always()
