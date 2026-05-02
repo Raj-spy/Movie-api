@@ -41,13 +41,13 @@ jobs:
       - name: Slack Success
         if: success()
         run: |
-         curl-x POST -H 'Content-type: application/json' \
+         curl -x POST -H 'Content-type: application/json' \
          --data '{"text":"Docker image ${{ secrets.DOCKER_USERNAME }}/movie-api:${{ github.sha }} built and pushed successfully!"}' \
          ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Slack Failure
         if: failure()
         run: |
-         curl-x POST -H 'Content-type: application/json' \
+         curl -x POST -H 'Content-type: application/json' \
          --data '{"text":"Failed to build or push Docker image ${{ secrets.DOCKER_USERNAME }}/movie-api:${{ github.sha }}."}' \
          ${{ secrets.SLACK_WEBHOOK_URL }}    
