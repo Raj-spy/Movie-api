@@ -77,7 +77,7 @@ def analyze_review(review: ReviewRequest):
     try:
         cached = redis_client.get(cache_key)
     except BaseException:
-     cached = None
+        cached = None
 
     if cached:
         result = json.loads(cached)
