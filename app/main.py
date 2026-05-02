@@ -75,18 +75,18 @@ def analyze_review(review: ReviewRequest):
     cache_key = f"sentiment:{review.text}"
 
     try:
-            cached = redis_client.get(cache_key)
-    except:
-            cached = None
+        cached = redis_client.get(cache_key)
+    except BaseException:
+         cached = None
 
     if cached:
-            result = json.loads(cached)
+        result = json.loads(cached)
     else:
-            result = analyze_sentiment(review.text)
-            try:
-                redis_client.set(cache_key, json.dumps(result))
-            except:
-                pass
+        result = analyze_sentiment(review.text)
+        try:
+            redis_client.set(cache_key, json.dumps(result))
+        except BaseException:
+            pass
 
     return ReviewResponse(
         movie_name=review.movie_name,
