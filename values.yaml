@@ -1,10 +1,13 @@
 replicaCount: 2
 
 image:
-  repository: rajspy/movie-api
-  tag: d5ce29d478f082bed6398e26ebed110e11ab16b9
+  repository: 257394469486.dkr.ecr.ap-south-1.amazonaws.com/movie-api
+  tag: latest
   pullPolicy: IfNotPresent
 
+# Ye section add karna ZAROORI hai
+imagePullSecrets:
+  - name: ecr-secret
 
 service:
   type: NodePort
