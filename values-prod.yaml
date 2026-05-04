@@ -1,11 +1,12 @@
-replicaCount: 3
+replicaCount: 3  # Prod usually has more
+
+image:
+  tag: "prod"
 
 resources:
   requests:
     cpu: 200m
     memory: 256Mi
-
+  
 ingress:
   host: movie-prod.local
-
-

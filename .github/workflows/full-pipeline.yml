@@ -1,0 +1,100 @@
+name: Full CI/CD Pipeline (ECR + Deploy)
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+
+  # 🔹 CI (Reuse)
+  test:
+    uses: ./.github/workflows/reusable-test.yml
+    with:
+      python-version: "3.11"
+
+  # 🔹 BUILD + PUSH TO ECR
+  build-and-push:
+    needs: test
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    outputs:
+      image: ${{ steps.meta.outputs.image }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::257394469486:role/github-oidc-role
+          aws-region: ap-south-1
+
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build Docker image
+        run: docker build -t movie-api .
+
+      - name: Tag image
+        id: meta
+        run: |
+          IMAGE=257394469486.dkr.ecr.ap-south-1.amazonaws.com/movie-api:${{ github.sha }}
+          echo "image=$IMAGE" >> $GITHUB_OUTPUT
+          docker tag movie-api:latest $IMAGE
+
+      - name: Push image
+        run: docker push ${{ steps.meta.outputs.image }}
+
+      - name: Trivy Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ steps.meta.outputs.image }}
+          severity: CRITICAL
+          exit-code: 1
+
+  # 🟢 DEV
+  deploy-dev:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          helm upgrade --install movie-dev . \
+          -n dev \
+          -f values-dev.yaml \
+          --set image.repository=257394469486.dkr.ecr.ap-south-1.amazonaws.com/movie-api \
+          --set image.tag=${{ github.sha }}
+
+  # 🟡 STAGING
+  deploy-staging:
+    needs: deploy-dev
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          helm upgrade --install movie-staging . \
+          -n staging \
+          -f values-staging.yaml \
+          --set image.repository=257394469486.dkr.ecr.ap-south-1.amazonaws.com/movie-api \
+          --set image.tag=${{ github.sha }}
+
+  # 🔴 PROD (MANUAL APPROVAL)
+  deploy-prod:
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          helm upgrade --install movie-prod . \
+          -n prod \
+          -f values-prod.yaml \
+          --set image.repository=257394469486.dkr.ecr.ap-south-1.amazonaws.com/movie-api \
+          --set image.tag=${{ github.sha }}

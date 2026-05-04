@@ -1,0 +1,13 @@
+replicaCount: 1
+
+image:
+  tag: "staging"
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# This must be at the very beginning of the line (no indentation)
+ingress:
+  enabled: false
