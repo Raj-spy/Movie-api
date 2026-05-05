@@ -27,3 +27,13 @@ resources:
   requests:
     cpu: 100m
     memory: 128Mi
+
+readinessProbe:
+   httpGet:
+   path: /health
+   port: 8000
+
+livenessProbe:
+    httpGet:
+    path: /health
+    port: 8000

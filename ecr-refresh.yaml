@@ -1,0 +1,101 @@
+# --- DEV NAMESPACE REFRESH ---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ecr-refresh-dev
+  namespace: dev
+spec:
+  schedule: "0 */8 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: ecr-refresh
+            image: bitnami/aws-cli:latest
+            env:
+            - name: AWS_ACCESS_KEY_ID
+              value: ${{ secrets.AWS_ACCESS_KEY_ID }} # Aapka Access Key
+            - name: AWS_SECRET_ACCESS_KEY
+              value: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # Aapka Secret Key
+            - name: AWS_DEFAULT_REGION
+              value: "ap-south-1"
+            command:
+            - /bin/sh
+            - -c
+            - |
+              TOKEN=$(aws ecr get-login-password)
+              kubectl delete secret ecr-secret --ignore-not-found -n dev
+              kubectl create secret docker-registry ecr-secret \
+                --docker-server=://amazonaws.com \
+                --docker-username=AWS \
+                --docker-password=$TOKEN -n dev
+          restartPolicy: OnFailure
+---
+# --- STAGING NAMESPACE REFRESH ---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ecr-refresh-staging
+  namespace: staging
+spec:
+  schedule: "0 */8 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: ecr-refresh
+            image: bitnami/aws-cli:latest
+            env:
+            - name: AWS_ACCESS_KEY_ID
+              value: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            - name: AWS_SECRET_ACCESS_KEY
+              value: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            - name: AWS_DEFAULT_REGION
+              value: "ap-south-1"
+            command:
+            - /bin/sh
+            - -c
+            - |
+              TOKEN=$(aws ecr get-login-password)
+              kubectl delete secret ecr-secret --ignore-not-found -n staging
+              kubectl create secret docker-registry ecr-secret \
+                --docker-server=://amazonaws.com \
+                --docker-username=AWS \
+                --docker-password=$TOKEN -n staging
+          restartPolicy: OnFailure
+---
+# --- PROD NAMESPACE REFRESH ---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ecr-refresh-prod
+  namespace: prod
+spec:
+  schedule: "0 */8 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: ecr-refresh
+            image: bitnami/aws-cli:latest
+            env:
+            - name: AWS_ACCESS_KEY_ID
+              value: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            - name: AWS_SECRET_ACCESS_KEY
+              value: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            - name: AWS_DEFAULT_REGION
+              value: "ap-south-1"
+            command:
+            - /bin/sh
+            - -c
+            - |
+              TOKEN=$(aws ecr get-login-password)
+              kubectl delete secret ecr-secret --ignore-not-found -n prod
+              kubectl create secret docker-registry ecr-secret \
+                --docker-server=://amazonaws.com \
+                --docker-username=AWS \
+                --docker-password=$TOKEN -n prod
+          restartPolicy: OnFailure
