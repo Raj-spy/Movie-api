@@ -17,3 +17,13 @@ __pycache__/
 
 # Docker
 .pid
+
+# Local terraform directory (binaries)
+.terraform/
+
+# State files
+*.tfstate
+*.tfstate.backup
+
+# Sensitive variables
+*.tfvars

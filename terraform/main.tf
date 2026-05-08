@@ -8,9 +8,10 @@ resource "aws_vpc" "main" {
 }
 
 # 2. Public Subnet (Reception Area)
-resource "aws_subnet" "public_subnet" {
+resource "aws_subnet" "public_subnet_1" {
   vpc_id                  = aws_vpc.main.id
-  cidr_block              = "10.0.1.0/24"
+  cidr_block              = "10.0.10.0/24"
+  availability_zone       = "ap-south-1a"
   map_public_ip_on_launch = true # Isse servers ko Public IP milega
 
   tags = {
@@ -18,13 +19,35 @@ resource "aws_subnet" "public_subnet" {
   }
 }
 
+resource "aws_subnet" "public_subnet_2" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.20.0/24"
+  availability_zone       = "ap-south-1b"
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "public-subnet-2"
+  }
+}
+
 # 3. Private Subnet (Safe Locker Room)
-resource "aws_subnet" "private_subnet" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = "10.0.2.0/24"
+resource "aws_subnet" "private_subnet_1" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.30.0/24"
+  availability_zone = "ap-south-1a"
 
   tags = {
     Name = "private-subnet"
+  }
+}
+
+resource "aws_subnet" "private_subnet_2" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.40.0/24"
+  availability_zone = "ap-south-1b"
+
+  tags = {
+    Name = "private-subnet-2"
   }
 }
 
@@ -51,8 +74,56 @@ resource "aws_route_table" "public_rt" {
   }
 }
 
+resource "aws_route_table_association" "public_assoc_1" {
+  subnet_id      = aws_subnet.public_subnet_1.id
+  route_table_id = aws_route_table.public_rt.id
+}
+
+resource "aws_route_table_association" "public_assoc_2" {
+  subnet_id      = aws_subnet.public_subnet_2.id
+  route_table_id = aws_route_table.public_rt.id
+}
+
 # 6. Public Subnet ko Route Table se Jodna
 resource "aws_route_table_association" "public_assoc" {
-  subnet_id      = aws_subnet.public_subnet.id
+  subnet_id      = aws_subnet.public_subnet_1.id
   route_table_id = aws_route_table.public_rt.id
+}
+
+
+module "eks" {
+  source  = "terraform-aws-modules/eks/aws"
+  version = "~> 20.0"
+
+  cluster_name    = "raj-eks-cluster"
+  cluster_version = "1.30"
+
+  subnet_ids = [
+    aws_subnet.public_subnet_1.id,
+    aws_subnet.public_subnet_2.id,
+    aws_subnet.private_subnet_1.id,
+    aws_subnet.private_subnet_2.id
+  ]
+
+  vpc_id = aws_vpc.main.id
+
+  eks_managed_node_groups = {
+    default = {
+      instance_types = ["t3.medium"]
+
+      min_size     = 1
+      max_size     = 2
+      desired_size = 1
+    }
+  }
+
+  cluster_addons = {
+    coredns    = {}
+    kube-proxy = {}
+    vpc-cni    = {}
+  }
+
+  tags = {
+    Environment = "dev"
+  }
 }
