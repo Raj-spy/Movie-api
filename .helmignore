@@ -7,3 +7,9 @@ __pycache__/
 *.png
 docs/
 tests/
+
+.terraform/
+terraform-provider-*
+*.tfstate
+*.tf
+.git/
