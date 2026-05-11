@@ -58,7 +58,7 @@ jobs:
 
 
 
-            # 🔹 DEPLOY TO EKS VIA HELM
+            # 🔹 DEPLOY TO EKS VIA HELM okk
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
