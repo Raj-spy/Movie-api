@@ -72,6 +72,9 @@ module "eks" {
   cluster_name    = "raj-eks-cluster"
   cluster_version = "1.30"
 
+  cluster_endpoint_public_access  = true
+  cluster_endpoint_private_access = true
+
   subnet_ids = [
     aws_subnet.public_subnet_1.id,
     aws_subnet.public_subnet_2.id,
