@@ -80,6 +80,6 @@ jobs:
       - name: Deploy to EKS with Helm
         run: |
           # Yahan hum --set flag use karke values.yaml ko override kar rahe hain
-          helm upgrade --install movie-api ./movie-api-chart \
+          helm upgrade --install movie-api . \
             --set image.tag=${{ github.sha }} \
             --wait
