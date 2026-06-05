@@ -2,13 +2,13 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 
 metadata:
-  name: raj-pvc
+  name: redis-pvc
 
 spec:
   accessModes:
     - ReadWriteOnce
 
-  storageClassName: gp3-storage
+  storageClassName: standard
 
   resources:
     requests:
